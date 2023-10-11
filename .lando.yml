@@ -1,0 +1,37 @@
+name: lw3
+recipe: laravel
+
+config:
+  php: '8.2'
+#  via: nginx #bug with storage images
+  via: apache
+  webroot: public
+  database: mysql:8.0
+  cache: redis
+  xdebug: true
+
+services:
+  database:
+    portforward: 33306
+    creds:
+      user: laratest
+      password: laratest
+      database: laratest
+
+  node:
+    type: node
+    overrides:
+      # Make ports in node environment available to localhost
+      ports:
+        - 3000:3000
+        - 8000:8000
+  mailhog:
+    type: mailhog
+    hogfrom:
+      - appserver
+
+tooling:
+  node:
+    service: node
+  npm:
+    service: node
